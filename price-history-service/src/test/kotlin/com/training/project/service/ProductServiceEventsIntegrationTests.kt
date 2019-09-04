@@ -2,6 +2,7 @@ package com.training.project.service
 
 import com.nhaarman.mockitokotlin2.argumentCaptor
 import com.nhaarman.mockitokotlin2.verify
+import com.training.project.service.implementation.ProductServiceImpl
 import com.training.project.service.model.Currency.DOLLAR
 import com.training.project.service.model.Currency.RUPEES
 import com.training.project.service.model.Price
@@ -11,13 +12,19 @@ import com.training.project.service.model.ProductRegistered
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.event.EventListener
+import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.junit.jupiter.SpringExtension
 
-@SpringBootTest(webEnvironment = RANDOM_PORT)
+@ExtendWith(SpringExtension::class)
+@DataJpaTest
+@EnableAutoConfiguration
+@ContextConfiguration(classes = [ProductServiceImpl::class])
 class ProductServiceEventsIntegrationTests(@Autowired val service: ProductService) {
 
     @MockBean
