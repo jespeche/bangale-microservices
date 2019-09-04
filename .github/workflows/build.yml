@@ -13,6 +13,7 @@ jobs:
       uses: actions/setup-java@v1
       with:
         java-version: 1.8
-    - name: Build with Gradle
-      run: ./gradlew -p products-service build
-      run: ./gradlew -p price-history-service build
+    - name: Build [Products Service]
+      run: products-service/gradlew -p products-service build
+    - name: Build [Price History Service]
+      run: price-history-service/gradlew -p price-history-service build
