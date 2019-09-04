@@ -1,20 +1,22 @@
+
 package com.training.project.graphql
 
+/*
 import com.coxautodev.graphql.tools.GraphQLMutationResolver
 import com.coxautodev.graphql.tools.GraphQLQueryResolver
-import com.training.project.service.ProductService
+import com.training.project.service.PriceHistoryService
 import org.springframework.stereotype.Component
 import java.util.UUID
 import com.training.project.service.model.Currency as CurrencyModel
 
 @Component
-class ProductQueryResolver(private val service: ProductService) : GraphQLQueryResolver {
+class ProductQueryResolver(private val service: PriceHistoryService) : GraphQLQueryResolver {
     fun product(id: UUID) = Product(service.product(id))
     fun products() = service.products().map { Product(it) }.toList()
 }
 
 @Component
-class ProductMutationResolver(private val service: ProductService) : GraphQLMutationResolver {
+class ProductMutationResolver(private val service: PriceHistoryService) : GraphQLMutationResolver {
     fun registerProduct(input: RegisterProductInput) = RegisterProductPayload(Product(service.registerProduct(input.name, currency(input.currency), input.amount)))
     fun deregisterProduct(input: DeregisterProductInput) = DeregisterProductPayload(Product(service.product(input.id).apply { service.deregisterProduct(id) }))
     fun renameProduct(input: RenameProductInput) = RenameProductPayload(Product(service.renameProduct(input.id, input.name)))
@@ -41,4 +43,4 @@ data class SetProductPricePayload(val product: Product)
 data class RenameProductInput(val id: UUID, val name: String)
 data class RenameProductPayload(val product: Product)
 
-private fun currency(currency: Currency) = CurrencyModel.valueOf(currency.name)
+private fun currency(currency: Currency) = CurrencyModel.valueOf(currency.name)*/

@@ -6,12 +6,10 @@ import org.junit.jupiter.api.Test
 
 import com.training.project.service.model.Currency as CurrencyModel
 import com.training.project.service.model.Price as PriceModel
-import com.training.project.service.model.Product as ProductModel
 
 class ModelTests {
 
     private val priceModel = PriceModel(CurrencyModel.DOLLAR, 10.0)
-    private val productModel = ProductModel("Docker", priceModel)
 
     @Test
     fun `Check Price`() {
@@ -21,6 +19,7 @@ class ModelTests {
         }
     }
 
+/*
     @Test
     fun `Check Product`() {
         Product(productModel).apply {
@@ -29,6 +28,7 @@ class ModelTests {
             assertThat(price).isEqualTo(Price(priceModel))
         }
     }
+*/
 
     @Test
     fun `Checking constants as per code coverage`() {
