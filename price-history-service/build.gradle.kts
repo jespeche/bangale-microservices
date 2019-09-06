@@ -50,6 +50,7 @@ dependencies {
 
     implementation("org.springframework.kafka:spring-kafka")
     implementation("com.fasterxml.jackson.core:jackson-databind")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 
     runtimeOnly("com.graphql-java-kickstart:graphiql-spring-boot-starter:5.10.0") { because("Embedded Graphql IDE") }
     runtimeOnly("com.graphql-java-kickstart:voyager-spring-boot-starter:5.10.0") { because("Embedded schema navigation") }
@@ -119,14 +120,14 @@ tasks {
 
 docker {
     val unpack = tasks.getByName<Copy>("unpack")
-    name = "bangale/products-service:latest"
+    name = "bangale/price-history-service:latest"
     copySpec.from(unpack.outputs).into("dependency")
     buildArgs(mapOf("DEPENDENCY" to "dependency"))
 }
 
 dockerRun {
-    name = "products-service"
-    image = "bangale/products-service:latest"
+    name = "price-history-service"
+    image = "bangale/price-history-service:latest"
     ports("8080:8080")
     daemonize = false
 }

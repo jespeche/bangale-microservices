@@ -3,8 +3,8 @@ type Query {
 }
 
 type PriceHistory {
+    timestamp: String!
     productId: ID!
-    timestamp: Date!
     price: Price!
 }
 
@@ -18,5 +18,3 @@ enum Currency {
     PESOS
     RUPEES
 }
-
-scalar Date

@@ -1,4 +1,3 @@
-/*
 package com.training.project.service
 
 import com.nhaarman.mockitokotlin2.any
@@ -14,56 +13,50 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.AdditionalAnswers.returnsFirstArg
-import org.springframework.context.ApplicationEventPublisher
-import java.util.Optional
-import java.util.UUID
+import java.util.Date
+import java.util.UUID.randomUUID
 
 class PriceHistoryServiceTests {
 
     private lateinit var service: PriceHistoryService
 
     private var repository: PriceHistoryRepository = mock()
-    private var publisher: ApplicationEventPublisher = mock()
-    //private val expectedProduct = PriceHistory("Robot", Price(PESOS, 100.0))
+    private val productId = randomUUID()
+    private val priceHistoryId = randomUUID()
+    private val expectedPriceHistory = PriceHistory(productId, Price(PESOS, 500.0), Date(), priceHistoryId)
 
     @BeforeEach
     fun setUp() {
-        service = PriceHistoryServiceImpl(repository, publisher)
+        service = PriceHistoryServiceImpl(repository)
     }
 
     @Test
-    fun `Check Product is retrieved`() {
-        whenever(repository.findById(any())).thenReturn(Optional.of(expectedProduct))
-        val product = service.product(expectedProduct.id)
-
-        assertThat(product).isNotNull
-        assertThat(product).isEqualTo(expectedProduct)
+    fun `Check Price History is retrieved`() {
+        whenever(repository.findFirst10ByProductIdOrderByTimestampDesc(any())).thenReturn(listOf(expectedPriceHistory))
+        val priceHistory = service.priceHistory(productId).first()
+        assertThat(priceHistory).isEqualTo(expectedPriceHistory)
     }
 
     @Test
-    fun `Check Product is retrieved failure throws exception`() {
-        whenever(repository.findById(any())).thenThrow(NoSuchElementException())
-        assertThrows<NoSuchElementException> { service.product(UUID.randomUUID()) }
+    fun `Check Price History is retrieved failure throws exception`() {
+        whenever(repository.findFirst10ByProductIdOrderByTimestampDesc(any())).thenThrow(NoSuchElementException())
+        assertThrows<NoSuchElementException> { service.priceHistory(randomUUID()) }
     }
 
     @Test
-    fun `Check Products are retrieved in a list`() {
-        whenever(repository.findAll()).thenReturn(listOf(expectedProduct))
-        val products = service.products()
-
-        assertThat(products).isNotEmpty
-        assertThat(products).contains(expectedProduct)
+    fun `Check Price History is retrieved in a list`() {
+        whenever(repository.findFirst10ByProductIdOrderByTimestampDesc(any())).thenReturn(listOf(expectedPriceHistory))
+        val priceHistory = service.priceHistory(productId)
+        assertThat(priceHistory).isNotEmpty
+        assertThat(priceHistory).contains(expectedPriceHistory)
     }
 
     @Test
-    fun `Check Product registration`() {
-        whenever(repository.save(any<Product>())).then(returnsFirstArg<Product>())
-        val product = service.registerProduct("Robot", PESOS, 100.0)
-
-        product.apply {
-            assertThat(name).isEqualTo(expectedProduct.name)
-            assertThat(price).isEqualTo(expectedProduct.price)
+    fun `Check Price History registration`() {
+        whenever(repository.save(any<PriceHistory>())).then(returnsFirstArg<PriceHistory>())
+        service.registerPrice(productId, PESOS, 500.0).apply {
+            assertThat(productId).isEqualTo(expectedPriceHistory.productId)
+            assertThat(price).isEqualTo(expectedPriceHistory.price)
         }
     }
-
-}*/
+}

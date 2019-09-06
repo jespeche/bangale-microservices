@@ -7,4 +7,5 @@ import java.util.UUID
 interface PriceHistoryService {
     fun priceHistory(productId: UUID): List<PriceHistory>
     fun registerPrice(productId: UUID, currency: Currency, price: Double): PriceHistory
+    fun removeProduct(productId: UUID)
 }

@@ -14,4 +14,5 @@ import javax.transaction.Transactional
 class PriceHistoryServiceImpl(private val repository: PriceHistoryRepository) : PriceHistoryService {
     override fun priceHistory(productId: UUID) = repository.findFirst10ByProductIdOrderByTimestampDesc(productId)
     override fun registerPrice(productId: UUID, currency: Currency, price: Double) = repository.save(PriceHistory(productId, Price(currency, price)))
+    override fun removeProduct(productId: UUID) = repository.deleteAllByProductId(productId)
 }

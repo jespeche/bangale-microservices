@@ -13,5 +13,4 @@ class PriceTests {
             assertThat(amount).isEqualTo(10.0)
         }
     }
-
 }
