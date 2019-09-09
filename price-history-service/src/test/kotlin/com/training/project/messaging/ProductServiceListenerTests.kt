@@ -8,12 +8,10 @@ import com.training.project.service.model.Currency
 import com.training.project.service.model.Price
 import com.training.project.service.model.ProductEvent
 import com.training.project.service.model.ProductRegistered
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.springframework.context.ApplicationEventPublisher
-import java.util.UUID
 import java.util.UUID.randomUUID
 
 /**
@@ -26,21 +24,20 @@ class ProductServiceListenerTests {
 
 
     private lateinit var publisher: ApplicationEventPublisher
-    private lateinit var listner: ProductsServiceListener
+    private lateinit var listener: ProductsServiceListener
     val productId = randomUUID()
 
     @BeforeEach
     fun setUp() {
         publisher = mock()
-        listner = ProductsServiceListener(publisher)
+        listener = ProductsServiceListener(publisher)
     }
-
 
     @Test
     fun `Check handle publishes appropriate event`() {
         val emptyString = ""
         val event = ProductRegistered(productId, emptyString, Price(Currency.DOLLAR, 10.0))
-        listner.handle(event)
+        listener.handle(event)
 
         val eventCaptor = argumentCaptor<ProductEvent>()
         verify(publisher).publishEvent(eventCaptor.capture())
@@ -48,5 +45,4 @@ class ProductServiceListenerTests {
         val expected = ProductRegistered(productId, emptyString, Price(Currency.DOLLAR, 10.0))
         assertThat(eventCaptor.lastValue).isEqualTo(expected)
     }
-
 }
