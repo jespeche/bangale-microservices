@@ -3,24 +3,26 @@ package com.training.project.graphql
 import com.nhaarman.mockitokotlin2.any
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.whenever
-import com.training.project.service.ProductService
+import com.training.project.service.PriceHistoryService
 import com.training.project.service.model.Currency
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.util.Date
 import java.util.NoSuchElementException
 import java.util.UUID.randomUUID
 import com.training.project.service.model.Price as PriceModel
-import com.training.project.service.model.Product as ProductModel
+import com.training.project.service.model.PriceHistory as PriceHistoryModel
 
 class QueryResolverTests {
 
-    private lateinit var service: ProductService
+    private lateinit var service: PriceHistoryService
     private lateinit var resolver: ProductQueryResolver
 
     private val priceModel = PriceModel(Currency.DOLLAR, 10.0)
-    private val productModel = ProductModel("Coke", priceModel)
+    private val productId = randomUUID()
+    private val priceHistoryModel = PriceHistoryModel(productId, priceModel, Date(), productId)
 
     @BeforeEach
     fun setUp() {
@@ -30,22 +32,22 @@ class QueryResolverTests {
 
     @Test
     fun `Check Product retrieval`() {
-        whenever(service.product(any())).thenReturn(productModel)
-        resolver.product(randomUUID()).apply {
-            assertThat(id).isEqualTo(productModel.id)
+        whenever(service.priceHistory(any())).thenReturn(listOf(priceHistoryModel))
+        resolver.priceHistory(productId).apply {
+            assertThat(productId).isEqualTo(priceHistoryModel.id)
         }
     }
 
     @Test
-    fun `Check Product retrieval throws exception when its empty`() {
-        whenever(service.product(any())).thenThrow(NoSuchElementException())
-        assertThrows<NoSuchElementException> { resolver.product(randomUUID()) }
+    fun `Check Price History retrieval throws exception when its empty`() {
+        whenever(service.priceHistory(any())).thenThrow(NoSuchElementException())
+        assertThrows<NoSuchElementException> { resolver.priceHistory(randomUUID()) }
     }
 
     @Test
-    fun `Check Products retrieval`() {
-        whenever(service.products()).thenReturn(listOf(productModel))
-        resolver.products().apply {
+    fun `Check Price Histrory retrieval is a list`() {
+        whenever(service.priceHistory(any())).thenReturn(listOf(priceHistoryModel))
+        resolver.priceHistory(productId).apply {
             assertThat(this).isNotEmpty
         }
     }

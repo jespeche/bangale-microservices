@@ -1,0 +1,20 @@
+type Query {
+    priceHistory(productId: ID!) : [PriceHistory!]!
+}
+
+type PriceHistory {
+    timestamp: String!
+    productId: ID!
+    price: Price!
+}
+
+type Price {
+    currency: Currency!
+    amount: Float!
+}
+
+enum Currency {
+    DOLLAR
+    PESOS
+    RUPEES
+}
